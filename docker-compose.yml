@@ -1,0 +1,16 @@
+services :
+  app:
+    build: .
+    volumes :
+      - .:/mental_ai
+    ports:
+      [8000:8000]
+    env_file:
+      - .env
+    image: app:mental_ai
+    container_name: mental_ai
+    environment:
+      - DEBUG = True
+      - DJANGO_ENV=local
+    command: [./entrypoint.sh]
+      
