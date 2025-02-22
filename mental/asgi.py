@@ -13,6 +13,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 from django.urls import path , re_path
+from .middlewares import JWTmiddleware
 from doctors.consumer import Aiserver   
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mental.settings')
@@ -20,10 +21,13 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mental.settings')
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AllowedHostsOriginValidator(
+        JWTmiddleware(
             URLRouter([
-                re_path('ws/chat', Aiserver.as_asgi()),
+                re_path(r'ws/chat',Aiserver.as_asgi())
             ])
+        )
     ),
 })
+
 
 

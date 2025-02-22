@@ -25,6 +25,8 @@ SECRET_KEY = 'django-insecure-$1#s5l13_grv@-7=z5+uh_m+%pm@+uz0w#eg8_#phs%_cv@ma-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.getenv("DEBUG", False))
 
+CHROMA_DB_HOST = os.getenv("CHROMA_DB_HOST", "http://localhost:8000")
+
 ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOW_CREDENTIALS = True

@@ -2,9 +2,14 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 class Aiserver(AsyncWebsocketConsumer):
     async def connect(self):
+
         from doctors.ai import Psychologist
+        from doctors.ai_mind import BrainForAI
         self.suri = Psychologist()
-        self.room_group_name = 'suri'
+        ids = self.scope['user']['id']
+        username = self.scope['user']['username']
+        # self.Suri_mind = BrainForAI()
+        self.room_group_name = f'SURI_{username}_{ids}'
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -22,8 +27,6 @@ class Aiserver(AsyncWebsocketConsumer):
                     chat = self.suri.issue
             elif "meditation" in message :
                 chat =  self.suri.meditation_guide(self.suri.issue)
-            elif "to commit suicide" in message :
-                chat = "This is  serious ,  contact with this number now.... helpline number : 911 ; or contact with Dr. Nilanjana Mam Noww "
             else :
                 chat =  self.suri.ask("user" , message)
         await self.channel_layer.group_send(
@@ -42,4 +45,7 @@ class Aiserver(AsyncWebsocketConsumer):
         }))
 
     async def disconnect(self, close_code):
-        pass
+          await self.channel_layer.group_discard(
+            self.room_group_name, 
+            self.channel_name
+        )
