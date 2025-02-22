@@ -34,7 +34,7 @@ class BrainForAI:
         }
         for item, embedding in zip(data, embed_data)
         ]
-        index.upsert(vectors=vectors, namespace=self.namespace)
+        self.index.upsert(vectors=vectors, namespace=self.namespace)
 
     def InsertData(self , data) :
         self.UpsertData(data)
@@ -62,5 +62,11 @@ class BrainForAI:
         )
 
         trimmed = [result['metadata'] for result in results.matches]
+        if trimmed == [] :
+            return None
+        question = trimmed[0]['q']
+        answer = trimmed[0]['a']
+        return [question , answer]
 
-        return trimmed
+
+

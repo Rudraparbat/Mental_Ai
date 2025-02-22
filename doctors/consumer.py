@@ -4,12 +4,14 @@ class Aiserver(AsyncWebsocketConsumer):
     async def connect(self):
 
         from doctors.ai import Psychologist
-        from doctors.ai_mind import BrainForAI
-        self.suri = Psychologist()
+
         ids = self.scope['user']['id']
         username = self.scope['user']['username']
-        # self.Suri_mind = BrainForAI()
+
         self.room_group_name = f'SURI_{username}_{ids}'
+
+        self.suri = Psychologist(self.room_group_name)
+
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -28,7 +30,7 @@ class Aiserver(AsyncWebsocketConsumer):
             elif "meditation" in message :
                 chat =  self.suri.meditation_guide(self.suri.issue)
             else :
-                chat =  self.suri.ask("user" , message)
+                chat =  self.suri.ask(message)
         await self.channel_layer.group_send(
             self.room_group_name,
             {

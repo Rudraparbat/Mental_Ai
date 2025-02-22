@@ -3,12 +3,17 @@ from langchain_core.prompts import PromptTemplate
 from threading import Thread
 from doctors.ai_model import model
 import asyncio
+import uuid
+from .ai_mind import *
 
 class Psychologist:
-    def __init__(self , issue=""):
+    def __init__(self , namespace , issue=""):
         self.llm = model()
         self.issue = issue
-        self.chat_history = {}  # Store chat history in memory
+        self.brain = BrainForAI(namespace)
+        self.chat_history = {}
+        self.Datasetsaving = 0  
+        self.save = []
 
     def store_conversation(self, user_id, user_message, bot_response):
         """Store the conversation in a dictionary."""
@@ -20,16 +25,26 @@ class Psychologist:
         """Retrieve the last 'num_messages' conversation history for the user."""
         return "\n".join(self.chat_history.get(user_id, [])[-num_messages:])
 
-    def ask(self, user_id, question):
+
+    def ask(self, question):
         """Process user input and return an AI-generated response."""
+        if self.Datasetsaving > 0:
+            semantic = self.brain.Search(question)
+            if semantic is None:
+                semantic = ["", ""]
+        else :
+            semantic = ["", ""]
         try:
             prompt_template = PromptTemplate.from_template(
                 """
             You are Suri, a top-level psychologist here to help a patient with their mental health concerns, which you’ll identify based on their question. You have access to past question-answer pairs from the patient’s memory to inform your advice. Provide the best, concise advice to help them overcome their issue, staying calm and patient in every situation.
-             Patient’s Question: "{raw_text}"
-             
+            Patient’s Question: "{raw_text}"
+            Retrieved Memory (if any):
+            Relevant Q: "{retrieved_q}" A: "{retrieved_a}"
+                        
              Instructions:
-             - If no memory is retrieved or it’s irrelevant, offer fresh advice based on your expertise.
+             - Use the retrieved memory if it’s relevant to shape your advice naturally (e.g., “I recall you mentioned...”).
+             - If no memory is retrieved or it’s irrelevant, offer fresh advice based on your expertise ,cause you are the Top Psychologist.
              - Keep answers SHORT and valuable, with a calm tone.
              - For casual questions, add humor or a light joke if appropriate.
              - For mental health issues, be serious, empathetic, and supportive, avoiding humor.
@@ -40,14 +55,32 @@ class Psychologist:
             Just provide your best advice without explaining your thought process.
                 """
             )
-            response = self.llm.invoke(prompt_template.format(raw_text=str(question))).content
-            self.store_conversation(user_id, question, response)
+            response = self.llm.invoke(prompt_template.format(raw_text=str(question) , retrieved_q=str(semantic[0] ), retrieved_a=str(semantic[1]))).content
+            Thread(target=self.Semantic_upsert , args=(question , response)).start()
 
             Thread(target=self.detect_mental_issue, args=()).start()
             return response
         except Exception as e:
             print(f"Error in ask: {e}")
             return "An error occurred. Please try again."
+
+    def Semantic_upsert(self, question , answer) :
+        if(question == "" or answer == "") :
+            return 
+        self.save.append(
+            {
+                "id" : str(uuid.uuid4()),
+                "question" : question,
+                "answer" : answer
+            }
+        )
+        print("The data is noowww" , len(self.save))
+        if(len(self.save) > 5) :
+            self.brain.InsertData(self.save)
+            self.Datasetsaving+=1
+            self.save = []
+        else :
+            return 
 
     def meditation_guide(self, issue):
         """Generate a guided meditation script based on the detected issue."""
