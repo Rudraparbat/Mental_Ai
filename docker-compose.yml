@@ -14,13 +14,6 @@ services :
       - DJANGO_ENV=local
       - CHROMA_DB_HOST=http://chromadb:8000
     command: [./entrypoint.sh]
-    depends_on:
-      - chromadb
 
 
-  chromadb:
-    image: chromadb/chroma
-    container_name: chromadb
-    restart: always
-    ports:
-      - "8000:8000"
+

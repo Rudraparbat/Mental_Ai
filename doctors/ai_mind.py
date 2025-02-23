@@ -68,5 +68,8 @@ class BrainForAI:
         answer = trimmed[0]['a']
         return [question , answer]
 
+    def Delete(self) :
+        self.index.delete(delete_all=True , namespace=self.namespace)
+        print("sorry you r disconnected we have no data on you")
 
 
