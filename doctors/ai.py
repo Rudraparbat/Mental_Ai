@@ -15,18 +15,17 @@ class Psychologist:
         self.Datasetsaving = 0
         # self.model = SentenceTransformer("all-MiniLM-L6-v2")
         self.brain = BrainForAI(namespace)
-        self.chat_history = {} 
         self.save = []
 
-    def store_conversation(self, user_id, user_message, bot_response):
-        """Store the conversation in a dictionary."""
-        if user_id not in self.chat_history:
-            self.chat_history[user_id] = []
-        self.chat_history[user_id].append(f"User: {user_message}\nDoctor: {bot_response}")
+    # def store_conversation(self, user_id, user_message, bot_response):
+    #     """Store the conversation in a dictionary."""
+    #     if user_id not in self.chat_history:
+    #         self.chat_history[user_id] = []
+    #     self.chat_history[user_id].append(f"User: {user_message}\nDoctor: {bot_response}")
 
-    def retrieve_history(self, user_id, num_messages=5):
-        """Retrieve the last 'num_messages' conversation history for the user."""
-        return "\n".join(self.chat_history.get(user_id, [])[-num_messages:])
+    # def retrieve_history(self, user_id, num_messages=5):
+    #     """Retrieve the last 'num_messages' conversation history for the user."""
+    #     return "\n".join(self.chat_history.get(user_id, [])[-num_messages:])
 
 
     def ask(self, question):
@@ -34,18 +33,10 @@ class Psychologist:
         if(self.Datasetsaving > 0) :
             semantic = self.brain.Search(question)
             if(semantic is  None) :
-                # semantic = ["", ""]
-                # semantic = self.search_buffer(question)
-                # if semantic is None :
-                #     semantic = ["", ""]
                 semantic = ["", ""]
         else :
             semantic = ["", ""]
-        # if semantic is None:
-        #     semantic = ["", ""]
-
-        # else :
-        #     semantic = ["", ""]
+        
 
         
         try:
@@ -60,7 +51,7 @@ class Psychologist:
              - Use the retrieved memory if it’s relevant to shape your advice naturally and show empathy.
              - If no memory is retrieved or it’s irrelevant, offer fresh advice based on your expertise ,cause you are the Top Psychologist.
              - Keep answers SHORT and valuable, with a calm tone.
-             - For casual questions, add humor or a light joke if appropriate.
+             - For casual questions, add humor or a light joke.
              - For mental health issues, be serious, empathetic, and supportive, avoiding humor.
              - Do not explain your thought process—just provide the advice.
              - If the Questions are like "i want to suicide" , "i want to die" or anything related to commiting death then provide 911 helpline number
@@ -130,6 +121,8 @@ class Psychologist:
 
     
     def Delete_user_data(self) :
+        if self.Datasetsaving <= 0 :
+            return None
         self.brain.Delete()
         self.Datasetsaving = 0
         self.save = []
