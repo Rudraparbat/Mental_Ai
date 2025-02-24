@@ -16,16 +16,17 @@ class Psychologist:
         # self.model = SentenceTransformer("all-MiniLM-L6-v2")
         self.brain = BrainForAI(namespace)
         self.save = []
+        self.chat_history = ""
 
-    # def store_conversation(self, user_id, user_message, bot_response):
-    #     """Store the conversation in a dictionary."""
-    #     if user_id not in self.chat_history:
-    #         self.chat_history[user_id] = []
-    #     self.chat_history[user_id].append(f"User: {user_message}\nDoctor: {bot_response}")
+    def store_conversation(self, user_id, user_message, bot_response):
+        """Store the conversation in a dictionary."""
+        if user_id not in self.chat_history:
+            self.chat_history[user_id] = []
+        self.chat_history[user_id].append(f"User: {user_message}\nDoctor: {bot_response}")
 
-    # def retrieve_history(self, user_id, num_messages=5):
-    #     """Retrieve the last 'num_messages' conversation history for the user."""
-    #     return "\n".join(self.chat_history.get(user_id, [])[-num_messages:])
+    def retrieve_history(self, user_id, num_messages=5):
+        """Retrieve the last 'num_messages' conversation history for the user."""
+        return "\n".join(self.chat_history.get(user_id, [])[-num_messages:])
 
 
     def ask(self, question):
@@ -42,21 +43,19 @@ class Psychologist:
         try:
             prompt_template = PromptTemplate.from_template(
                 """
-            You are Suri, a top-level psychologist here to help a patient with their mental health concerns, which you’ll identify based on their question. You have access to past question-answer pairs from the patient’s memory to inform your advice. Provide the best, concise advice to help them overcome their issue, staying calm and patient in every situation.
+            You are Suri, a top-level psychologist here to help a patient who is suffering from mental issues, that you have to identify based on their question and have to give 
+            Best Advice , EMOTIONAL SUPPORT and provide 'SHORT ADVICE' to the patient to overcome this issues and you have to be very 
+            'calm' and 'patience' and 'SENSITIVE' in every situation  You have access to past question-answer pairs from the patient’s memory to inform your advice. 
             Patient’s Question: "{raw_text}"
             Retrieved Memory (if any):
             Relevant Q: "{retrieved_q}" A: "{retrieved_a}"
-                        
+            (NO PREAMBLE)    
              Instructions:
              - Use the retrieved memory if it’s relevant to shape your advice naturally and show empathy.
              - If no memory is retrieved or it’s irrelevant, offer fresh advice based on your expertise ,cause you are the Top Psychologist.
-             - Keep answers SHORT and valuable, with a calm tone.
-             - For casual questions, add humor or a light joke.
-             - For mental health issues, be serious, empathetic, and supportive, avoiding humor.
-             - Do not explain your thought process—just provide the advice.
              - If the Questions are like "i want to suicide" , "i want to die" or anything related to commiting death then provide 911 helpline number
     
-            (NO PREAMBLE),
+            (NO PREAMBLE),(NOTE :- PROVIDE SHORT AND VALUABLE ANSWERS ON EVERY QUESTION try to crack jokes AND ANSWER THEM IN A RELAXING WAY)
             Just provide your best advice without explaining your thought process.
                 """
             )
