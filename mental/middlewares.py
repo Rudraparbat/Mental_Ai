@@ -20,7 +20,7 @@ class JWTmiddleware(BaseMiddleware):
                 'id' : token_data['id'],
                 'username' : token_data['username']
             }
-        return await super().__call__(scope , receieve , send)
+        return await super().__call__(scope , receive , send)
     def decoder(self , token) :
         decoded_token = jwt.decode(token, options={"verify_signature": False})
         return decoded_token
