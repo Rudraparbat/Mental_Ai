@@ -102,6 +102,7 @@ SIMPLE_JWT = {
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',  
+    'https://mental-rwqo.onrender.com',
 ]
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

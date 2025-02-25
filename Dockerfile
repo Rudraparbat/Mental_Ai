@@ -13,6 +13,7 @@ COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt  
 
+RUN chmod +x /app/entrypoint.sh
 # Set environment variables
 ENV DJANGO_SETTINGS_MODULE=mental.settings
 ENV PYTHONUNBUFFERED=1
