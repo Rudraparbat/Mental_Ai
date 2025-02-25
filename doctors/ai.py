@@ -5,7 +5,6 @@ from doctors.ai_model import model
 import asyncio
 import uuid
 import numpy as np
-from sentence_transformers import SentenceTransformer
 from .ai_mind import *
 
 class Psychologist:
@@ -80,7 +79,6 @@ class Psychologist:
                 "answer" : answer
             }
         )
-        print("The data is noowww" , len(self.save))
         if(len(self.save) > 0) :
             self.brain.InsertData(self.save)
             self.Datasetsaving+=1

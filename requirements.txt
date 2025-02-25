@@ -49,9 +49,6 @@ openai==1.63.2
 orjson==3.10.15
 packaging==24.2
 pinecone==6.0.1
-pinecone-client==5.0.1
-pinecone-plugin-inference==1.1.0
-pinecone-plugin-interface==0.0.7
 propcache==0.3.0
 protobuf==5.29.3
 protoc-gen-openapiv2==0.0.1

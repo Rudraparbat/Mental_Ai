@@ -22,12 +22,7 @@ class Aiserver(AsyncWebsocketConsumer):
         if text_data:
             text_data_json = json.loads(text_data)
             message = text_data_json['message']
-            if "issue" in message :
-                if self.suri.issue == "" :
-                    chat = "you seems ok"
-                else :
-                    chat = self.suri.issue
-            elif "meditation" in message :
+            if "meditation" in message :
                 chat =  self.suri.meditation_guide(self.suri.issue)
             else :
                 chat =  self.suri.ask(message)
