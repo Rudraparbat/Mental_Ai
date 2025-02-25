@@ -4,11 +4,13 @@ class Aiserver(AsyncWebsocketConsumer):
     async def connect(self):
 
         from doctors.ai import Psychologist
+        if self.scope['user'] is not None:
+            ids = self.scope['user']['id']
+            username = self.scope['user']['username']
 
-        ids = self.scope['user']['id']
-        username = self.scope['user']['username']
-
-        self.room_group_name = f'SURI_{username}_{ids}'
+            self.room_group_name = f'SURI_{username}_{ids}'
+        else :
+            await self.close()
 
         self.suri = Psychologist(self.room_group_name)
 
