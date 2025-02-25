@@ -100,6 +100,9 @@ SIMPLE_JWT = {
   "TOKEN_OBTAIN_SERIALIZER": "authers.serializers.Myrefreshtoken",
 }
 
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',  
+]
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
