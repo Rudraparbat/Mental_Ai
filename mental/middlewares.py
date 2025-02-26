@@ -3,24 +3,34 @@ import jwt
 
 class JWTmiddleware(BaseMiddleware):
     async def __call__(self, scope, receive, send):
-        try :
-            cookies = scope['headers'][13]
-        except :
-            cookies = scope['headers'][10]
-        scopes = scope['headers']
-        decode_cookie = cookies[1].decode('utf-8')
-        try :
-            cookies = dict(item.split('=') for item in decode_cookie.split('; '))
-            access_token = cookies.get('access_token')
-        except :
-            access_token = None
-        if access_token :
-            token_data = self.decoder(access_token)
-            scope['user'] ={
-                'id' : token_data['id'],
-                'username' : token_data['username']
-            }
-        return await super().__call__(scope , receive , send)
+        # Extract cookies from headers
+        cookies = None
+        for header_name, header_value in scope['headers']:
+            if header_name == b'cookie':
+                cookies = header_value.decode('utf-8')
+                break
+
+        # Parse cookies and extract access_token
+        access_token = None
+        if cookies:
+            cookie_pairs = [pair.strip() for pair in cookies.split(';')]
+            cookie_dict = dict(pair.split('=', 1) for pair in cookie_pairs if '=' in pair)
+            access_token = cookie_dict.get('access_token')
+
+        # Decode token and attach user info to scope
+        if access_token:
+            try:
+                token_data = self.decoder(access_token)
+                scope['user'] = {
+                    'id': token_data['user_id'],  # Adjusted to match your token's field
+                    'username': token_data['username']
+                }
+            except jwt.InvalidTokenError:
+                scope['user'] = None
+        else:
+            scope['user'] = None
+        print(scope['user'])
+        return await super().__call__(scope, receive, send)
     def decoder(self , token) :
         decoded_token = jwt.decode(token, options={"verify_signature": False})
         return decoded_token
