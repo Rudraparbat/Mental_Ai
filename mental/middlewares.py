@@ -5,6 +5,7 @@ class JWTmiddleware(BaseMiddleware):
     async def __call__(self, scope, receive, send):
         # Extract cookies from headers
         cookies = None
+        print(scope)
         for header_name, header_value in scope['headers']:
             if header_name == b'cookie':
                 cookies = header_value.decode('utf-8')
