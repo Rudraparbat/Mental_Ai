@@ -1,5 +1,6 @@
 from channels.middleware import BaseMiddleware
 import jwt
+from urllib.parse import parse_qs
 
 class JWTmiddleware(BaseMiddleware):
     async def __call__(self, scope, receive, send):
