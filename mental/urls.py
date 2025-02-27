@@ -21,5 +21,6 @@ from doctors.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/register/',CreateUserProfile.as_view(),name='register'),
+    path('api/authstatus/',Authstatus.as_view(),name='status'),
     path('api/login/',Loginuser.as_view(),name='login'),
 ]

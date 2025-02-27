@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializer import *
 from django.contrib.auth.hashers import make_password , check_password
+import jwt
 
 
 class CreateUserProfile(APIView) :
@@ -23,11 +24,11 @@ class CreateUserProfile(APIView) :
             response = Response(
                 {
                     "data" : serializer.data,
-                    "user_id" : user.id,
-                    "access_token" : access_token,
-                    "refresh_token" : refresh_token
+                    "user_id" : serializer.data['id'],
                 }
             )
+            response.set_cookie("access_token", value=access_token, httponly=True, secure=False, samesite='Strict')
+            response.set_cookie("refresh_token", value=refresh_token, httponly=True, secure=False, samesite='Strict')
             return response
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -59,3 +60,26 @@ class Loginuser(APIView) :
             return response
         else :
             return Response({"message"  : "Password mismatched"} , status=status.HTTP_404_NOT_FOUND)
+
+    
+
+class Authstatus(APIView) :
+    def get(self , request) :
+        token = request.COOKIES.get("access_token")  # Get JWT from HTTP-only cookie
+        print("token is:", token)
+
+        if not token:
+            return Response({"authenticated": False, "error": "Token not found"}, status=401)
+
+        try:
+            print("start decoding")
+            payload = jwt.decode(token,  options={"verify_signature": False}, algorithms=["HS256"])
+            print("Decoded Payload:", payload)  # Debugging
+            return Response({"authenticated": True, "user_id": payload["user_id"]})
+        
+        except jwt.ExpiredSignatureError:
+            return Response({"authenticated": False, "error": "Token expired"}, status=401)
+        except jwt.InvalidTokenError:
+            return Response({"authenticated": False, "error": "Invalid token"}, status=401)
+        except Exception as e:
+            return Response({"authenticated": False, "error": "Server error"}, status=500)
