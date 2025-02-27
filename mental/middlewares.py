@@ -5,21 +5,8 @@ from urllib.parse import parse_qs
 class JWTmiddleware(BaseMiddleware):
     async def __call__(self, scope, receive, send):
         # Extract cookies from headers
-        print(scope['headers'])
-        try :
-            cookies = scope['headers'][13]
-        except :
-            cookies = scope['headers'][10]
-        print(cookies)
-        decode_cookie = cookies[1].decode('utf-8')
-        print(decode_cookie)
-        try :
-            cookie = dict(item.split('=') for item in decode_cookie.split('; '))
-            access_token = cookie.get('access_token')
-        except :
-            access_token = None
-
-        print(access_token)
+        access_token = self.extract_access_token(scope['headers'])
+        print("Access Token:", access_token)
         if access_token :
             token_data = self.decoder(access_token)
             scope['user'] ={
@@ -31,3 +18,20 @@ class JWTmiddleware(BaseMiddleware):
     def decoder(self , token) :
         decoded_token = jwt.decode(token, options={"verify_signature": False})
         return decoded_token
+    def extract_access_token(self, headers):
+        # Convert headers list to dict
+        headers_dict = dict(headers)
+        
+        # Get cookie header and decode it
+        cookie_header = headers_dict.get(b'cookie', b'').decode('utf-8')
+        if not cookie_header:
+            print("No cookie header found")
+            return None
+        
+        # Parse cookie string to find access_token
+        for cookie in cookie_header.split('; '):
+            if cookie.startswith('access_token='):
+                return cookie.split('=', 1)[1]  # Split on first '=' only
+        
+        print("No access_token in cookies")
+        return None
