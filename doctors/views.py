@@ -27,8 +27,8 @@ class CreateUserProfile(APIView) :
                     "user_id" : serializer.data['id'],
                 }
             )
-            response.set_cookie("access_token", value=access_token, httponly=True, secure=False, samesite='Strict')
-            response.set_cookie("refresh_token", value=refresh_token, httponly=True, secure=False, samesite='Strict')
+            response.set_cookie("access_token", value=access_token, httponly=True, secure=True, samesite='Strict')
+            response.set_cookie("refresh_token", value=refresh_token, httponly=True, secure=True, samesite='Strict')
             return response
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
