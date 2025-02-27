@@ -10,6 +10,7 @@ class JWTmiddleware(BaseMiddleware):
             cookies = scope['headers'][13]
         except :
             cookies = scope['headers'][10]
+        print(cookies)
         decode_cookie = cookies[1].decode('utf-8')
         print(decode_cookie)
         try :
