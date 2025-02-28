@@ -17,7 +17,7 @@ class CreateUserProfile(APIView) :
         serializer = LoginSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            user = Mentaluser.objects.filter(email = data['email']).first()
+            user = Mentaluser.objects.get(id = serializer.data['id'])
             refresh = Myrefreshtoken.for_user(user)
             access_token  = str(refresh.access_token)
             refresh_token = str(refresh)
