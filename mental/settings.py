@@ -34,11 +34,13 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173", 
-    "http://localhost:5174", # 
+    "http://localhost:5174",
+    "https://mental-health-bot-eight.vercel.app/"
 ]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",  
     "http://localhost:5174",
+    "https://mental-health-bot-eight.vercel.app/"
 ]
 # Application definition
 
@@ -92,10 +94,10 @@ TEMPLATES = [
     },
 ]
 
-SESSION_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SAMESITE = "None"
 SESSION_COOKIE_SECURE = True 
 CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "None"
 
 ASGI_APPLICATION = 'mental.asgi.application'
 
@@ -106,6 +108,7 @@ SIMPLE_JWT = {
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',  
     'https://mental-rwqo.onrender.com',
+    'https://mental-health-bot-eight.vercel.app/'
 ]
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
