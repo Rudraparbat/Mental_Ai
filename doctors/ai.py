@@ -2,9 +2,9 @@ import os
 from langchain_core.prompts import PromptTemplate
 from threading import Thread
 from doctors.ai_model import model
-import asyncio
+
 import uuid
-import numpy as np
+
 from .ai_mind import *
 
 class Psychologist:
@@ -42,7 +42,7 @@ class Psychologist:
         try:
             prompt_template = PromptTemplate.from_template(
                 """
-            You are Suri, a top-level psychologist here to help a patient who is suffering from mental issues, that you have to identify based on their question and have to give 
+            You are XYLA, a top-level psychologist here to help a patient who is suffering from mental issues, that you have to identify based on their question and have to give 
             Best Advice , EMOTIONAL SUPPORT and provide 'SHORT ADVICE' to the patient to overcome this issues and you have to be very 
             'calm' and 'patience' and 'SENSITIVE' in every situation  You have access to past question-answer pairs from the patient’s memory to inform your advice. 
             Patient’s Question: "{raw_text}"

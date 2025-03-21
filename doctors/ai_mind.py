@@ -1,7 +1,5 @@
 from pinecone.grpc import PineconeGRPC as Pinecone
 from pinecone import ServerlessSpec 
-import openai
-import time
 import os
 
 
