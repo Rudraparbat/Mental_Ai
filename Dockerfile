@@ -1,11 +1,16 @@
 # Use slim image for a smaller footprint
-FROM python:3.13-slim-bookworm
+FROM python:3.13.2-slim-bookworm
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    gcc \
+    libmariadb-dev \
+    libmariadb-dev-compat \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container
 WORKDIR /app
-
-# Copy only requirements fir
-# Install dependencies
 
 
 # Copy the rest of the application

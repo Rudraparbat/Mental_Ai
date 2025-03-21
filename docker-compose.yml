@@ -12,7 +12,6 @@ services :
     environment:
       - DEBUG = True
       - DJANGO_ENV=local
-      - CHROMA_DB_HOST=http://chromadb:8000
     command: [./entrypoint.sh]
 
 
