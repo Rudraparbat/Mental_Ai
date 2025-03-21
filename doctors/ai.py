@@ -2,7 +2,6 @@ import os
 from langchain_core.prompts import PromptTemplate
 from threading import Thread
 from doctors.ai_model import model
-
 import uuid
 
 from .ai_mind import *
