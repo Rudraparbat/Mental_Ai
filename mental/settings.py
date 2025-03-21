@@ -12,11 +12,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+load_dotenv()
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -115,10 +116,17 @@ CSRF_TRUSTED_ORIGINS = [
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',  # MySQL Engine
+        'NAME': os.getenv("DB_NAME"),               # RDS Database Name
+        'USER': os.getenv("DB_USER"),               # RDS Username
+        'PASSWORD': os.getenv("DB_PASSWORD"),       # RDS Password
+        'HOST': os.getenv("DB_ENDPOINT"),          # RDS Endpoint (e.g., mydb.xxxxxxxx.us-east-1.rds.amazonaws.com)
+        'PORT': '3306',                       # Default MySQL port
+        
     }
 }
 
