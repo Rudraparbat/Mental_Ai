@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 from dotenv import load_dotenv
 from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -116,18 +117,11 @@ CSRF_TRUSTED_ORIGINS = [
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-
+db_url = os.getenv("PG_DB_URL")
+print(db_url)
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',  # MySQL Engine
-        'NAME': os.getenv("DB_NAME"),               # RDS Database Name
-        'USER': os.getenv("DB_USER"),               # RDS Username
-        'PASSWORD': os.getenv("DB_PASSWORD"),       # RDS Password
-        'HOST': os.getenv("DB_ENDPOINT"),          # RDS Endpoint (e.g., mydb.xxxxxxxx.us-east-1.rds.amazonaws.com)
-        'PORT': '3306',                       # Default MySQL port
-        
-    }
+    "default": dj_database_url.config(default=db_url)
 }
 
 
