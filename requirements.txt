@@ -106,3 +106,4 @@ zope.interface==7.2
 zstandard==0.23.0
 python-dotenv==1.0.1
 pymysql==1.0.2
+psycopg2==2.9.10
