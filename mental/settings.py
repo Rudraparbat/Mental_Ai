@@ -19,6 +19,9 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
+
+
+db_url = os.getenv("PG_DB_URL")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -117,7 +120,6 @@ CSRF_TRUSTED_ORIGINS = [
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-db_url = os.getenv("PG_DB_URL")
 print(db_url)
 
 DATABASES = {
