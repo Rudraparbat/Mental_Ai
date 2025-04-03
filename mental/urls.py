@@ -17,10 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path 
 from doctors.views import *
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/register/',CreateUserProfile.as_view(),name='register'),
     path('api/authstatus/',Authstatus.as_view(),name='status'),
-    path('api/login/',Loginuser.as_view(),name='login'),
+    path('api/resettoken/',AutoLogin.as_view(),name='autologin'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

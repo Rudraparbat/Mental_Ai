@@ -62,6 +62,43 @@ class Loginuser(APIView) :
         else :
             return Response({"message"  : "Password mismatched"} , status=status.HTTP_404_NOT_FOUND)
 
+class AutoLogin(APIView) :
+    def get(self , request) :
+        try :
+            refresh_token = request.COOKIES.get("refresh_token")
+
+            if refresh_token is None :
+                return Response({
+                    "message" : "Invalid token"
+                } , status= status.HTTP_401_UNAUTHORIZED)
+
+            new_token = Myrefreshtoken(refresh_token)
+
+            new_access_token = str(new_token.access_token)
+            new_refresh_token = str(new_token)
+            
+
+            response = Response(
+                {
+                    "message" : "Token Renewed"
+                },
+                status=status.HTTP_201_CREATED
+            )
+
+            response.set_cookie("access_token", value=new_access_token, httponly=True, secure=True, samesite='None')
+            response.set_cookie("refresh_token", value=new_refresh_token, httponly=True, secure=True, samesite='None')
+            print("Cookies set:", response.cookies)
+            return response
+        except Exception as e :
+            print("The Error is :" , str(e))
+            return Response({
+                "message" : "we can find the token sorry sign up again"
+            },
+            status=status.HTTP_400_BAD_REQUEST)
+
+        
+
+
     
 
 class Authstatus(APIView) :
