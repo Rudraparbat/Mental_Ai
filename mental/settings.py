@@ -20,8 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
 
-
 db_url = os.getenv("PG_DB_URL")
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
