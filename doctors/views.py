@@ -85,8 +85,8 @@ class AutoLogin(APIView) :
                 status=status.HTTP_201_CREATED
             )
 
-            response.set_cookie("access_token", value=new_access_token, httponly=True, secure=True, samesite='None')
-            response.set_cookie("refresh_token", value=new_refresh_token, httponly=True, secure=True, samesite='None')
+            response.set_cookie("access_token", value=new_access_token, httponly=True, secure=True, max_age=60*60 ,  samesite='None')
+            response.set_cookie("refresh_token", value=new_refresh_token, httponly=True, secure=True, max_age=60*60*24*7,  samesite='None')
             print("Cookies set:", response.cookies)
             return response
         except Exception as e :

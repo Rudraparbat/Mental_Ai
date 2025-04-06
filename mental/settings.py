@@ -80,11 +80,19 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mental.urls'
 
+
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
+
+# Celery Configurations
+
+
+
+# Celery Taks Defined
 
 TEMPLATES = [
     {
@@ -172,7 +180,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": False,

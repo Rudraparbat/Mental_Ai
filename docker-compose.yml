@@ -13,6 +13,3 @@ services :
       - DEBUG = True
       - DJANGO_ENV=local
     command: [./entrypoint.sh]
-
-
-
