@@ -121,3 +121,16 @@ class Authstatus(APIView) :
             return Response({"authenticated": False, "error": "Invalid token"}, status=401)
         except Exception as e:
             return Response({"authenticated": False, "error": "Server error"}, status=500)
+        
+
+class GetAllMeditationMusic(APIView) :
+    def get(self , request) :
+        data = VideoMeditaion.objects.all()
+        if data is None :
+            return Response({
+                "message" : "No data found"
+            } , status = status.HTTP_404_NOT_FOUND)
+        serializer = VideoMeditationSerializer(data , many=True)
+
+        return Response(serializer.data , status = status.HTTP_200_OK)
+        

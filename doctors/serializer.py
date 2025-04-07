@@ -8,6 +8,17 @@ class LoginSerializer(serializers.ModelSerializer) :
         fields = '__all__'
 
 
+class VideoMeditationSerializer(serializers.ModelSerializer) :
+    audio_url = serializers.SerializerMethodField()
+    class Meta :
+        model = VideoMeditaion
+        fields = '__all__'
+
+    def get_audio_url(self, obj):
+        if obj.video_partial_id:
+            return obj.video_partial_id.url
+        return None
+
 class Myrefreshtoken(RefreshToken) :
     @classmethod
     def for_user(self , user) :

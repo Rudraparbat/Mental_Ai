@@ -29,4 +29,6 @@ urlpatterns = [
     path('api/authstatus/',Authstatus.as_view(),name='status'),
     path('api/resettoken/',AutoLogin.as_view(),name='autologin'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/meditationmusic/',GetAllMeditationMusic.as_view(),name='login'),
 ]
+
