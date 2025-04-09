@@ -13,19 +13,26 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+import cloudinary
 from dotenv import load_dotenv
 from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
+cloud_name = os.getenv("CLOUD_NAME")
+cloud_api_key = os.getenv("CLOUDINARY_API_KEY")
+cloud_api_secret = os.getenv("API_SECRET")
+cloudinary.config(
+    cloud_name=cloud_name,
+    api_key=cloud_api_key,
+    api_secret=cloud_api_secret
+)
 
 db_url = os.getenv("PG_DB_URL")
 
 
-cloud_name = os.getenv("CLOUD_NAME")
-cloud_api_key = os.getenv("CLOUDINARY_API_KEY")
-cloud_api_secret = os.getenv("API_SECRET")
+
 
 print(cloud_api_key , cloud_api_secret , cloud_name)
 
