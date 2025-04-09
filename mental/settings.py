@@ -23,6 +23,13 @@ load_dotenv()
 db_url = os.getenv("PG_DB_URL")
 
 
+cloud_name = os.getenv("CLOUD_NAME")
+cloud_api_key = os.getenv("CLOUDINARY_API_KEY")
+cloud_api_secret = os.getenv("API_SECRET")
+
+print(cloud_api_key , cloud_api_secret , cloud_name)
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -70,9 +77,9 @@ INSTALLED_APPS = [
 ]
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv("CLOUD_NAME"),
-    'API_KEY': os.getenv("CLOUDINARY_API_KEY"),
-    'API_SECRET': os.getenv("API_SECRET"),
+    'CLOUD_NAME': cloud_name,
+    'API_KEY': cloud_api_key,
+    'API_SECRET': cloud_api_secret,
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
