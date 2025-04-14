@@ -8,9 +8,10 @@ from rest_framework import status
 from .serializer import *
 from django.contrib.auth.hashers import make_password , check_password
 import jwt
-
+from rest_framework.permissions import AllowAny
 
 class CreateUserProfile(APIView) :
+    permission_classes = [AllowAny,]
     def post(self, request):
         data = request.data.copy()
         data['set_password'] = make_password(data['set_password'])
