@@ -28,7 +28,7 @@ class BrainForAI:
         {
             "id": item["id"],
             "values": embedding['values'],
-            "metadata": {"q": item["question"] , "a" : item['answer']}
+            "metadata": {"q": item["question"] , "a" : item['answer'], "e" : item['emotion']}
         }
         for item, embedding in zip(data, embed_data)
         ]
@@ -64,7 +64,8 @@ class BrainForAI:
             return None
         question = trimmed[0]['q']
         answer = trimmed[0]['a']
-        return [question , answer]
+        emotion = trimmed[0]['e']
+        return [question , answer , emotion]
 
     def Delete(self) :
         self.index.delete(delete_all=True , namespace=self.namespace)

@@ -99,9 +99,6 @@ class AutoLogin(APIView) :
 
         
 
-
-    
-
 class Authstatus(APIView) :
     def get(self , request) :
         token = request.COOKIES.get("access_token")  # Get JWT from HTTP-only cookie

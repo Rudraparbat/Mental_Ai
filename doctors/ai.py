@@ -3,6 +3,7 @@ from langchain_core.prompts import PromptTemplate
 from threading import Thread
 from doctors.ai_model import model
 import uuid
+from .ai_emotion import detect_emotion
 
 from .ai_mind import *
 
@@ -32,35 +33,36 @@ class Psychologist:
         if(self.Datasetsaving > 0) :
             semantic = self.brain.Search(question)
             if(semantic is  None) :
-                semantic = ["", ""]
+                semantic = ["", "" ,""]
         else :
-            semantic = ["", ""]
+            semantic = ["", "" , ""]
         
-
+        emotion = detect_emotion(question)
         
         try:
             prompt_template = PromptTemplate.from_template(
                 """
-            You are XYLA, a top-level psychologist here to help a patient who is suffering from mental issues, that you have to identify based on their question and have to give 
+            You are XYLA, a top-level psychologist here to help a patient who is suffering from mental issues, that you have to identify based on their question and emotion and have to give 
             Best Advice , EMOTIONAL SUPPORT and provide 'SHORT ADVICE' to the patient to overcome this issues and you have to be very 
-            'calm' and 'patience' and 'SENSITIVE' in every situation  You have access to past question-answer pairs from the patient’s memory to inform your advice. 
+            'calm' and 'patience' and 'SENSITIVE' in every situation  You have access to past question-answer-emotions pairs from the patient’s memory to inform your advice. 
             Patient’s Question: "{raw_text}"
+            Patient’s Emotions : "{emo}"
             Retrieved Memory (if any):
-            Relevant Q: "{retrieved_q}" A: "{retrieved_a}"
+            Relevant Q: "{retrieved_q}" A: "{retrieved_a}" E : {retrieved_e}
             (NO PREAMBLE)    
              Instructions:
              - Use the retrieved memory if it’s relevant to shape your advice naturally and show empathy.
              - If no memory is retrieved or it’s irrelevant, offer fresh advice based on your expertise ,cause you are the Top Psychologist.
              - If the Questions are like "i want to suicide" , "i want to die" or anything related to commiting death then provide 911 helpline number
-    
+             - Dont Use "it seems like" , "i think" , and also dont repeat same content in every answer.
             (NO PREAMBLE),(NOTE :- PROVIDE SHORT AND VALUABLE ANSWERS ON EVERY QUESTION try to crack jokes AND ANSWER THEM IN A RELAXING WAY)
             Just provide your best advice without explaining your thought process.
                 """
             )
 
-            response = self.llm.invoke(prompt_template.format(raw_text=str(question) , retrieved_q=str(semantic[0] ), retrieved_a=str(semantic[1]))).content
+            response = self.llm.invoke(prompt_template.format(raw_text=str(question) ,emo = str(emotion) , retrieved_q=str(semantic[0] ), retrieved_a=str(semantic[1]) ,retrieved_e= str(semantic[2]))).content
 
-            Thread(target=self.Semantic_upsert , args=(question , response)).start()
+            Thread(target=self.Semantic_upsert , args=(question , response , emotion)).start()
 
             Thread(target=self.detect_mental_issue, args=()).start()
             return response
@@ -68,14 +70,15 @@ class Psychologist:
             print(f"Error in ask: {e}")
             return "An error occurred. Please try again."
 
-    def Semantic_upsert(self, question , answer) :
+    def Semantic_upsert(self, question , answer , emotion) :
         if(question == "" or answer == "") :
             return 
         self.save.append(
             {
                 "id" : str(uuid.uuid4()),
                 "question" : question,
-                "answer" : answer
+                "answer" : answer,
+                "emotion" : emotion
             }
         )
         if(len(self.save) > 0) :
